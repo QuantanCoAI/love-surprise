@@ -1,88 +1,169 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Love Championship 🏆❤️</title>
+    <title>Love Championship Puzzle 🏆</title>
     <style>
         body {
-            margin: 0;
-            overflow: hidden;
             font-family: Arial, sans-serif;
             text-align: center;
-            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            background: linear-gradient(to right, #141e30, #243b55);
             color: white;
+            margin: 0;
         }
 
         h1 {
-            margin-top: 20px;
+            padding: 20px;
         }
 
-        #score {
-            font-size: 24px;
+        #stats {
+            font-size: 20px;
             margin-bottom: 20px;
         }
 
-        #heart {
-            position: absolute;
-            font-size: 40px;
-            cursor: pointer;
-            transition: 0.2s;
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            gap: 15px;
+            justify-content: center;
         }
 
-        #message {
-            display: none;
-            font-size: 28px;
+        .card {
+            width: 100px;
+            height: 100px;
+            background: #ff4b5c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .card.flipped {
+            background: white;
+            color: black;
+            cursor: default;
+        }
+
+        #result {
+            font-size: 26px;
             margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
         }
 
         .back-btn {
             position: fixed;
             bottom: 20px;
             left: 20px;
-            padding: 10px 20px;
             background: white;
-            color: #ff4b5c;
-            border-radius: 20px;
+            color: black;
             text-decoration: none;
-            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 15px;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>🏆 Win My Heart Championship ❤️</h1>
-    <div id="score">Score: 0</div>
-    <div id="message">You Won My Heart Forever Deep 💕🥇</div>
-    <div id="heart">❤️</div>
+<h1>🏆 Love Championship Puzzle ❤️</h1>
+<div id="stats">Moves: 0</div>
 
-    <a href="index.html" class="back-btn">Back</a>
+<div class="game-board" id="board"></div>
 
-    <script>
-        let score = 0;
-        const heart = document.getElementById("heart");
-        const scoreDisplay = document.getElementById("score");
-        const message = document.getElementById("message");
+<div id="result"></div>
+<button onclick="restartGame()">Restart Game</button>
 
-        function moveHeart() {
-            const x = Math.random() * (window.innerWidth - 50);
-            const y = Math.random() * (window.innerHeight - 50);
-            heart.style.left = x + "px";
-            heart.style.top = y + "px";
-        }
+<a href="index.html" class="back-btn">Back</a>
 
-        heart.addEventListener("click", function() {
-            score++;
-            scoreDisplay.innerText = "Score: " + score;
-            moveHeart();
+<script>
+const symbols = ["❤️","❤️","🏏","🏏","⚽","⚽","🥇","🥇","💪","💪","🔥","🔥"];
+let shuffled = symbols.sort(() => 0.5 - Math.random());
 
-            if (score >= 10) {
-                message.style.display = "block";
-                heart.style.display = "none";
-            }
-        });
+let board = document.getElementById("board");
+let firstCard = null;
+let secondCard = null;
+let lockBoard = false;
+let moves = 0;
+let matchedPairs = 0;
 
-        moveHeart();
-    </script>
+function createBoard() {
+    board.innerHTML = "";
+    shuffled.forEach(symbol => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.dataset.symbol = symbol;
+        card.innerText = "?";
+        card.addEventListener("click", flipCard);
+        board.appendChild(card);
+    });
+}
+
+function flipCard() {
+    if (lockBoard || this.classList.contains("flipped")) return;
+
+    this.innerText = this.dataset.symbol;
+    this.classList.add("flipped");
+
+    if (!firstCard) {
+        firstCard = this;
+        return;
+    }
+
+    secondCard = this;
+    moves++;
+    document.getElementById("stats").innerText = "Moves: " + moves;
+
+    if (firstCard.dataset.symbol === secondCard.dataset.symbol) {
+        matchedPairs++;
+        resetTurn();
+        if (matchedPairs === 6) showResult();
+    } else {
+        lockBoard = true;
+        setTimeout(() => {
+            firstCard.innerText = "?";
+            secondCard.innerText = "?";
+            firstCard.classList.remove("flipped");
+            secondCard.classList.remove("flipped");
+            resetTurn();
+        }, 800);
+    }
+}
+
+function resetTurn() {
+    [firstCard, secondCard, lockBoard] = [null, null, false];
+}
+
+function showResult() {
+    let message = "";
+    if (moves <= 12) {
+        message = "🥇 Ultimate Champion of My Heart Deep ❤️";
+    } else if (moves <= 18) {
+        message = "🏆 Great Player! But I Still Love You More 😉";
+    } else {
+        message = "😂 Practice More Mister Athlete! Love Wins!";
+    }
+    document.getElementById("result").innerText = message;
+}
+
+function restartGame() {
+    shuffled = symbols.sort(() => 0.5 - Math.random());
+    moves = 0;
+    matchedPairs = 0;
+    document.getElementById("stats").innerText = "Moves: 0";
+    document.getElementById("result").innerText = "";
+    createBoard();
+}
+
+createBoard();
+</script>
 
 </body>
 </html>
