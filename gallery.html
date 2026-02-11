@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deep's Victory Wall 🏆</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            padding: 20px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .photo-box {
+            background: rgba(255,255,255,0.1);
+            border: 2px dashed white;
+            border-radius: 15px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .add-btn {
+            margin: 20px;
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            background: white;
+            color: #203a43;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            border: none;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+        }
+
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            color: black;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🏆 Deep's Victory Wall ❤️</h1>
+<p>Add your best tournament moments here Champion 💪🔥</p>
+
+<div class="gallery" id="gallery">
+
+    <!-- Placeholder Boxes -->
+    <div class="photo-box">Your Winning Moment 🥇</div>
+    <div class="photo-box">Add Your Tournament Pic 🏏</div>
+
+</div>
+
+<button class="add-btn" onclick="addPhoto()">+ Add More</button>
+
+<a href="index.html" class="back-btn">Back</a>
+
+<script>
+function addPhoto() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const gallery = document.getElementById("gallery");
+
+            const box = document.createElement("div");
+            box.className = "photo-box";
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "×";
+            deleteBtn.className = "delete-btn";
+            deleteBtn.onclick = function() {
+                box.remove();
+            };
+
+            box.appendChild(img);
+            box.appendChild(deleteBtn);
+            gallery.appendChild(box);
+        };
+
+        reader.readAsDataURL(file);
+    };
+
+    input.click();
+}
+</script>
+
+</body>
+</html>
