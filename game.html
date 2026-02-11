@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Love Championship 🏆❤️</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        #score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #heart {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #message {
+            display: none;
+            font-size: 28px;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: #ff4b5c;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🏆 Win My Heart Championship ❤️</h1>
+    <div id="score">Score: 0</div>
+    <div id="message">You Won My Heart Forever Deep 💕🥇</div>
+    <div id="heart">❤️</div>
+
+    <a href="index.html" class="back-btn">Back</a>
+
+    <script>
+        let score = 0;
+        const heart = document.getElementById("heart");
+        const scoreDisplay = document.getElementById("score");
+        const message = document.getElementById("message");
+
+        function moveHeart() {
+            const x = Math.random() * (window.innerWidth - 50);
+            const y = Math.random() * (window.innerHeight - 50);
+            heart.style.left = x + "px";
+            heart.style.top = y + "px";
+        }
+
+        heart.addEventListener("click", function() {
+            score++;
+            scoreDisplay.innerText = "Score: " + score;
+            moveHeart();
+
+            if (score >= 10) {
+                message.style.display = "block";
+                heart.style.display = "none";
+            }
+        });
+
+        moveHeart();
+    </script>
+
+</body>
+</html>
